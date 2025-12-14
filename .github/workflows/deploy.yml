@@ -6,14 +6,16 @@ on:
       - main
   workflow_dispatch:
 
+# GitHub Pages 배포를 위한 권한 설정
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# 동시 배포 방지
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -33,6 +35,13 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Verify build output
+        run: |
+          echo "Build output contents:"
+          ls -la dist/
+          echo "---"
+          cat dist/index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
